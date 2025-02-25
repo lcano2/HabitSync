@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct ContentView: View {
     @EnvironmentObject var viewModel: AuthViewModel
     
@@ -17,11 +15,30 @@ struct ContentView: View {
             if viewModel.userSession == nil {
                 LoginView()
             } else {
-                NavigationSplitView {
-                    CreateHabitView(habits: .constant([]))
-                    //HomeView()
-                } detail: {
-                    ProfileView()
+                TabView {
+                    NavigationView {
+                        HomeView()
+                            .navigationTitle("Home")
+                    }
+                    .tabItem {
+                        Label("Home", systemImage: "house.fill")
+                    }
+                    
+                    NavigationView {
+                        CreateHabitView(habits: .constant([]))
+                            .navigationTitle("Create Habit")
+                    }
+                    .tabItem {
+                        Label("Habits", systemImage: "list.bullet")
+                    }
+                    
+                    NavigationView {
+                        ProfileView()
+                            .navigationTitle("Profile")
+                    }
+                    .tabItem {
+                        Label("Profile", systemImage: "person.fill")
+                    }
                 }
             }
         }
@@ -36,4 +53,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
 
