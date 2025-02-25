@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct ContentView: View {
     @EnvironmentObject var viewModel: AuthViewModel
     
@@ -16,7 +18,8 @@ struct ContentView: View {
                 LoginView()
             } else {
                 NavigationSplitView {
-                    HomeView()
+                    CreateHabitView(habits: .constant([]))
+                    //HomeView()
                 } detail: {
                     ProfileView()
                 }

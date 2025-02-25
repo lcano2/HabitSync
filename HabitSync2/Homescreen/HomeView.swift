@@ -19,6 +19,10 @@ struct HomeView: View {
                 NavigationLink("Go to Account Page", destination:
                     ProfileView())
                     .padding()
+                Spacer()
+                
+                Link("Resources", destination: URL(string: "https://jamesclear.com/habits")!)
+                    .padding()
             }
             .navigationTitle("Home")
         }
