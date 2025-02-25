@@ -39,11 +39,16 @@ struct LoginView: View {
                 
                 //sign in button
                 Button {
-                    Task{
-                        try await viewModel.signIn(withEmail: email, password: password)
+                    Task {
+                        print("DEBUG: Sign In button tapped") // Debug print
+                        do {
+                            try await viewModel.signIn(withEmail: email, password: password)
+                        } catch {
+                            print("DEBUG: Sign In error - \(error.localizedDescription)")
+                        }
                     }
                 } label: {
-                    HStack{
+                    HStack {
                         Text("SIGN IN")
                             .fontWeight(.semibold)
                         Image(systemName: "arrow.right")
@@ -52,10 +57,11 @@ struct LoginView: View {
                     .frame(width: UIScreen.main.bounds.width - 32, height: 48)
                 }
                 .background(Color(.systemBlue))
-                .disabled(formIsValid)
+                .disabled(!formIsValid)
                 .opacity(formIsValid ? 1.0 : 0.5)
                 .cornerRadius(10)
                 .padding(.top, 24)
+
                 
                 Spacer()
                 
