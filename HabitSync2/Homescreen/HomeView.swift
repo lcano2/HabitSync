@@ -12,35 +12,49 @@ struct HomeView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                Button(action: {
-                    isJournalPresented.toggle()
-                }) {
-                    Image("Little Plant")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 200, height: 220)
-                }
-                .sheet(isPresented: $isJournalPresented) {
-                    JournalView(isPresented: $isJournalPresented)
-                }
+            ZStack {
+                // Background color
+                Color(red: 0.85, green: 0.91, blue: 0.80)
+                    .ignoresSafeArea()
                 
-                Text("Check-In")
+                VStack {
+                    Button(action: {
+                        isJournalPresented.toggle()
+                    }) {
+                        Image("Little Plant")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 200, height: 220)
+                    }
+                    .sheet(isPresented: $isJournalPresented) {
+                        JournalView(isPresented: $isJournalPresented)
+                    }
+                    
+                    Text("Check-In")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding(.top, 8)
 
-                NavigationLink(destination: JournalHistoryView()) {
-                    Text("View Journal Entries")
+                    NavigationLink(destination: JournalHistoryView()) {
+                        Text("View Journal Entries")
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                            .padding(.horizontal, 24)
+                    }
+                    .padding(.top, 12)
+                    
+                    Link("Resources", destination: URL(string: "https://jamesclear.com/habits")!)
                         .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
                 }
-                .padding()
-
-                
             }
         }
     }
 }
+
 
 
 

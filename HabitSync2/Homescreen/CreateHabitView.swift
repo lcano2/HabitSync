@@ -15,41 +15,47 @@ struct CreateHabitView: View {
     @Binding var habits: [Habit]
     
     var body: some View {
-        VStack {
-            TextField("Enter habit name", text: $habitName)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            
-            Picker("Frequency", selection: $selectedFrequency) {
-                ForEach(frequencies, id: \.self) { frequency in
-                    Text(frequency)
-                }
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
-            
-            Button("Add Habit") {
-                let newHabit = Habit(name: habitName, frequency: selectedFrequency, createdDate: Date())
-                habits.append(newHabit)
-                habitName = "" // Reset the habit name field
-            }
-            .padding()
-            .disabled(habitName.isEmpty)
-        }
-        .navigationTitle("Create New Habit")
-        
-        NavigationStack {
+        ZStack {
+            Color(red: 0.85, green: 0.91, blue: 0.80)
+                .ignoresSafeArea()
+
             VStack {
-                
-                NavigationLink("Go to Account Page", destination:
-                    ProfileView())
+                TextField("Enter habit name", text: $habitName)
                     .padding()
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .background(Color.white)
+                    .cornerRadius(8)
+                    .padding(.horizontal, 24)
                 
-                Link("Resources", destination: URL(string: "https://jamesclear.com/habits")!)
-                    .padding()
+                Picker("Frequency", selection: $selectedFrequency) {
+                    ForEach(frequencies, id: \.self) { frequency in
+                        Text(frequency)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+
+                Button("Add Habit") {
+                    let newHabit = Habit(name: habitName, frequency: selectedFrequency, createdDate: Date())
+                    habits.append(newHabit)
+                    habitName = ""
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.green)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .padding(.horizontal, 24)
+                .disabled(habitName.isEmpty)
+                .opacity(habitName.isEmpty ? 0.5 : 1.0)
+
+                Spacer()
+                
+
             }
-            .navigationTitle("Home")
+            .navigationTitle("Create New Habit")
         }
     }
 }
+
 

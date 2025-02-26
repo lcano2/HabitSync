@@ -11,33 +11,35 @@ struct ContentView: View {
     @EnvironmentObject var viewModel: AuthViewModel
     
     var body: some View {
-        Group {
-            if viewModel.userSession == nil {
-                LoginView()
-            } else {
-                TabView {
-                    NavigationView {
-                        HomeView()
-                            .navigationTitle("Home")
-                    }
-                    .tabItem {
-                        Label("Home", systemImage: "house.fill")
-                    }
-                    
-                    NavigationView {
-                        CreateHabitView(habits: .constant([]))
-                            .navigationTitle("Create Habit")
-                    }
-                    .tabItem {
-                        Label("Habits", systemImage: "list.bullet")
-                    }
-                    
-                    NavigationView {
-                        ProfileView()
-                            .navigationTitle("Profile")
-                    }
-                    .tabItem {
-                        Label("Profile", systemImage: "person.fill")
+        ZStack {
+            Group {
+                if viewModel.userSession == nil {
+                    LoginView()
+                } else {
+                    TabView {
+                        NavigationView {
+                            HomeView()
+                                .navigationTitle("Home")
+                        }
+                        .tabItem {
+                            Label("Home", systemImage: "house.fill")
+                        }
+                        
+                        NavigationView {
+                            CreateHabitView(habits: .constant([]))
+                                .navigationTitle("Create Habit")
+                        }
+                        .tabItem {
+                            Label("Habits", systemImage: "list.bullet")
+                        }
+                        
+                        NavigationView {
+                            ProfileView()
+                                .navigationTitle("Profile")
+                        }
+                        .tabItem {
+                            Label("Profile", systemImage: "person.fill")
+                        }
                     }
                 }
             }
