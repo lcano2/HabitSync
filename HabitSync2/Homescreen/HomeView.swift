@@ -9,6 +9,13 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var isJournalPresented = false
+    
+    // Format the date
+    private var currentDate: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter.string(from: Date())
+    }
 
     var body: some View {
         NavigationView {
@@ -18,13 +25,18 @@ struct HomeView: View {
                     .ignoresSafeArea()
                 
                 VStack {
+                    // Display the current date
+                    Text(currentDate)
+                        .font(.headline)
+                        .padding(.bottom, 8)
+
                     Button(action: {
                         isJournalPresented.toggle()
                     }) {
-                        Image("Little Plant")
+                        Image("Little_Plant_2")
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 200, height: 220)
+                            .frame(width: 400, height: 420)
                     }
                     .sheet(isPresented: $isJournalPresented) {
                         JournalView(isPresented: $isJournalPresented)
