@@ -71,12 +71,17 @@ struct JournalView: View {
                         .onChange(of: selectedDate) { newValue in
                             isDatePickerVisible = false
                         }
-                } // ✅ Moved this closing brace here to fix the issue
+                }
 
-                TextField("Journal Prompt", text: $subject)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.horizontal)
-                    .disabled(true) // Make it read-only
+                Text(subject)
+                    .font(.system(size: 16))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(nil)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(8)
+
 
                 TextEditor(text: $journalEntry)
                     .frame(height: 120)

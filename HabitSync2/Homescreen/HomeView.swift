@@ -57,10 +57,8 @@ struct HomeView: View {
                             .cornerRadius(8)
                             .padding(.horizontal, 24)
                     }
-                    .padding(.top, 12)
                     
-                    Link("Resources", destination: URL(string: "https://jamesclear.com/habits")!)
-                        .padding()
+                
                 }
             }
         }
