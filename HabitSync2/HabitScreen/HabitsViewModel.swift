@@ -8,13 +8,16 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import FirebaseAuth
 
 class HabitsViewModel: ObservableObject {
     @Published var habits: [Habit] = []
     private let db = Firestore.firestore()
 
     func fetchHabits() {
-        db.collection("habits").addSnapshotListener { snapshot, error in
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        db.collection("users").document(userId).collection("habits").addSnapshotListener { snapshot, error in
             if let error = error {
                 print("Error fetching habits: \(error.localizedDescription)")
                 return
@@ -29,13 +32,16 @@ class HabitsViewModel: ObservableObject {
     }
 
     func addHabit(_ habit: Habit) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
         do {
-            let _ = try db.collection("habits").addDocument(from: habit)
+            let _ = try db.collection("users").document(userId).collection("habits").addDocument(from: habit)
         } catch {
             print("Error saving habit: \(error.localizedDescription)")
         }
     }
 }
+
 
 
 
