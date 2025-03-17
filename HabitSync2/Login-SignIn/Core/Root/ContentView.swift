@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var viewModel: AuthViewModel
-    
+
     var body: some View {
         ZStack {
             Group {
@@ -24,15 +24,14 @@ struct ContentView: View {
                         .tabItem {
                             Label("Home", systemImage: "house.fill")
                         }
-                        
+
                         NavigationView {
-                            CreateHabitView(habits: .constant([]))
-                                .navigationTitle("Create Habit")
+                            HabitListView()  
                         }
                         .tabItem {
                             Label("Habits", systemImage: "list.bullet")
                         }
-                        
+
                         NavigationView {
                             ProfileView()
                                 .navigationTitle("Profile")
@@ -44,16 +43,17 @@ struct ContentView: View {
                 }
             }
         }
-        .onAppear {
-            print("DEBUG: ContentView appeared. Current user session: \(String(describing: viewModel.userSession))")
-        }
     }
 }
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(AuthViewModel())
     }
 }
+
 
 

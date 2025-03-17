@@ -10,12 +10,9 @@ import Firebase
 
 @main
 struct HabitSync2App: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var viewModel = AuthViewModel()
-    
-    init(){
-        FirebaseApp.configure()
-    }
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -23,3 +20,4 @@ struct HabitSync2App: App {
         }
     }
 }
+

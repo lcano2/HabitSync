@@ -15,57 +15,40 @@ struct JournalView: View {
     @State private var subject: String = ""
     @State private var selectedDate: Date = Date()
     @State private var journalEntries: [JournalEntry] = []
-    @State private var isDatePickerVisible: Bool = false  // Initially hidden
+    @State private var isDatePickerVisible: Bool = false
 
-    func saveJournalEntry() {
-        guard let userID = Auth.auth().currentUser?.uid else {
-            print("No user logged in")
-            return
-        }
-
-        let db = Firestore.firestore()
-        let journalEntryData: [String: Any] = [
-            "subject": subject,
-            "entry": journalEntry,
-            "date": Timestamp(date: selectedDate)
-        ]
-
-        db.collection("users").document(userID).collection("journalEntries").addDocument(data: journalEntryData) { error in
-            if let error = error {
-                print("Error saving journal entry: \(error.localizedDescription)")
-            } else {
-                print("Journal entry saved successfully!")
-                fetchJournalEntries()
-                DispatchQueue.main.async {
-                    isPresented = false
-                }
-            }
-        }
-    }
-
-    func fetchJournalEntries() {
-        guard let userID = Auth.auth().currentUser?.uid else { return }
-        let db = Firestore.firestore()
-
-        db.collection("users").document(userID).collection("journalEntries")
-            .order(by: "date", descending: true)
-            .getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error fetching journal entries: \(error.localizedDescription)")
-                    return
-                }
-
-                if let documents = snapshot?.documents {
-                    let newEntries = documents.compactMap { doc -> JournalEntry? in
-                        try? doc.data(as: JournalEntry.self)
-                    }
-
-                    DispatchQueue.main.async {
-                        self.journalEntries = newEntries
-                    }
-                }
-            }
-    }
+    let prompts = [
+        "What are you grateful for today?",
+        "Describe a moment that made you smile recently.",
+        "What’s a challenge you’re currently facing?",
+        "If you could give advice to your past self, what would it be?",
+        "What are three things you love about yourself?",
+        "Write about a time you stepped out of your comfort zone.",
+        "What’s something new you learned this week?",
+        "How do you want to feel by the end of today?",
+        "Describe your dream life in five years.",
+        "What’s one thing you wish more people knew about you?",
+        "What’s a fear you’d like to overcome?",
+        "Write about a small win you had recently.",
+        "What’s a habit you want to build or break?",
+        "If money wasn’t an issue, what would you do with your life?",
+        "What’s something that always makes you feel better?",
+        "Who inspires you the most and why?",
+        "Describe your perfect day from start to finish.",
+        "What’s something you’re currently working on improving?",
+        "Write about a memory that brings you joy.",
+        "What’s your biggest goal right now?",
+        "What would you do if you weren’t afraid of failure?",
+        "What’s one thing you want to let go of?",
+        "Describe a moment when you felt truly at peace.",
+        "If today was your last day, how would you spend it?",
+        "What’s something you’ve been procrastinating on?",
+        "Write about someone who has had a big impact on your life.",
+        "What’s a book, movie, or song that changed your perspective?",
+        "If you could master any skill instantly, what would it be?",
+        "What does success mean to you?",
+        "How do you want to be remembered?"
+    ]
 
     var body: some View {
         NavigationView {
@@ -85,14 +68,15 @@ struct JournalView: View {
                     DatePicker("", selection: $selectedDate, displayedComponents: [.date])
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .padding()
-                        .onChange(of: selectedDate) { _ in
-                            isDatePickerVisible = false  // Hide after selection
+                        .onChange(of: selectedDate) { newValue in
+                            isDatePickerVisible = false
                         }
-                }
+                } // ✅ Moved this closing brace here to fix the issue
 
                 TextField("Journal Prompt", text: $subject)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal)
+                    .disabled(true) // Make it read-only
 
                 TextEditor(text: $journalEntry)
                     .frame(height: 120)
@@ -123,7 +107,35 @@ struct JournalView: View {
             }
             .navigationTitle("Journal")
             .padding(.top)
-            .onAppear { fetchJournalEntries() }
+            .onAppear {
+                subject = prompts.randomElement() ?? "What’s on your mind today?"
+            }
+        }
+    }
+
+    func saveJournalEntry() {
+        guard let userID = Auth.auth().currentUser?.uid else {
+            print("No user logged in")
+            return
+        }
+
+        let db = Firestore.firestore()
+        let journalEntryData: [String: Any] = [
+            "subject": subject,
+            "entry": journalEntry,
+            "date": Timestamp(date: selectedDate)
+        ]
+
+        db.collection("users").document(userID).collection("journalEntries").addDocument(data: journalEntryData) { error in
+            if let error = error {
+                print("Error saving journal entry: \(error.localizedDescription)")
+            } else {
+                print("Journal entry saved successfully!")
+                
+                DispatchQueue.main.async {
+                    isPresented = false
+                }
+            }
         }
     }
 }
